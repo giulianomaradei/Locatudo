@@ -10,4 +10,8 @@ public class Series extends Product {
 
         this.pieces = pieces;
     }
+
+    public String[] getPieces() {
+        return pieces;
+    }
 }

@@ -14,7 +14,7 @@ public class Address {
     }
 
     public String getFullAddress() {
-        return this.street + ", " + this.number + " - " + this.district + " - " + this.zipCode + " - " + this.complement;
+        return this.street + ", " + this.number + ", " + this.district + ", " + this.zipCode + ", " + this.complement;
     }
 
     public void setStreet(String street) {

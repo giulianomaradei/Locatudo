@@ -26,10 +26,9 @@ public class Lease {
         totalValue += product.getPrice();
     }
 
-    public void removeLeasedItem(Integer item) {
-        this.leasedItems.remove(item);
-
-        totalValue -= this.leasedItems.get(item).getPrice();
+    public void removeLeasedItem(Product product) {
+        totalValue -= product.getPrice();
+        this.leasedItems.remove(product);
     }
 
     public String getLeaseNumber() {
