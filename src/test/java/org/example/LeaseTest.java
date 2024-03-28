@@ -3,30 +3,29 @@ package org.example;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
 public class LeaseTest {
 
-    private ArrayList<Product> leasedItems = new ArrayList<Product>();
+    private final Product product = new Product("PROD124", "Produto Exemplo 2", 200.0, 120,
+    new String[] { "Genêro 3", "Genêro 4" }, 20);
+    private final ArrayList<Product> leasedItems = new ArrayList<Product>(Arrays.asList(product));
     private final Lease lease = new Lease("Número do Contrato", "Data de Início", "Data de Retorno", null, leasedItems);
 
     @Test
-    void testAddLeasedItem() {
-        Product newProduct = new Product("PROD124", "Produto Exemplo 2", 200.0, 120,
-                new String[] { "Genêro 3", "Genêro 4" }, 20);
-        lease.addLeasedItem(newProduct);
-
-        // Verifica se o produto foi adicionado à lista de itens alugados
-        assertTrue(lease.getLeasedItems().contains(newProduct));
-        assertEquals(lease.getTotalValue(), newProduct.getPrice());
-    }
-
-    @Test
     void testRemoveLeasedItem() {
-        Product product = new Product("PROD124", "Produto Exemplo 2", 200.0, 120,
-                new String[] { "Genêro 3", "Genêro 4" }, 20);
-        lease.addLeasedItem(product);
-        
+        // Verifique se o valor total é igual ao preço do produto
+        assertEquals(200.0, lease.getTotalValue());
+
+        // Remova o produto do contrato de locação
+        lease.removeLeasedItem(product);
+
+        // Verifique se o valor total é agora 0
+        assertEquals(0.0, lease.getTotalValue());
+
+        // Verifique se o produto foi removido da lista de produtos alugados
+        assertFalse(lease.getLeasedItems().contains(product));
     }
 }

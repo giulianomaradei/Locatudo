@@ -21,4 +21,23 @@ public class ProductTest {
         product.rent();
         assertEquals(1, product.getRentedQuantity());
     }
+
+    @Test
+    public void testReturnProduct() {
+        // Crie um produto
+        Product product = new Product("PROD124", "Produto Exemplo 2", 200.0, 120,
+        new String[] { "Genêro 3", "Genêro 4" }, 20);
+
+        // Alugue o produto
+        product.rent();
+
+        // Verifique se a quantidade alugada é 1
+        assertEquals(1, product.getRentedQuantity());
+
+        // Retorne o produto
+        product.returnProduct();
+
+        // Verifique se a quantidade alugada é agora 0
+        assertEquals(0, product.getRentedQuantity());
+    }
 }

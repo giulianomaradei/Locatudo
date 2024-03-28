@@ -12,16 +12,16 @@ public class Main {
 
     public static void main(String[] args) {
 
-        produtos.add(new Product("001", "Senhor dos Anais", 10.0, 120, new String[]{"Ação", "Aventura"}, 10));
+        produtos.add(new Product("001", "Senhor dos Anéis", 10.0, 120, new String[]{"Ação", "Aventura"}, 10));
         produtos.add(new Product("002", "Django Livre", 20.0, 120, new String[]{"Ação", "Aventura"}, 1));
 
-        clientes.add(new Client("EU", "123", new Address("Rua 1", "Bairro 1", "12345678", "Complemento 1", 1)));
+        clientes.add(new Client("EU", "123", new Address("1", "1", "12345678", "Apto 0", "1")));
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("1. Gerenciamento de Clientes");
-            System.out.println("2. Pesquisa de Produtos");
-            System.out.println("Escolha uma opção:");
+            System.out.println("\n1. Gerenciamento de Clientes");
+            System.out.println("2. Gerenciamento de Produtos");
+            System.out.print("Escolha uma opção: ");
             int option = scanner.nextInt();
             switch (option) {
                 case 1:
@@ -37,15 +37,14 @@ public class Main {
     }
 
     private static void manageClients(Scanner scanner) {
-        clearScreen();
 
-        System.out.println("1. Cadastrar novo cliente");
+        System.out.println("\n1. Cadastrar novo cliente");
         System.out.println("2. Consultar dados do cliente");
         System.out.println("3. Consultar todos os clientes");
         System.out.println("4. Realizar nova locação");
         System.out.println("5. Voltar");
 
-        System.out.println("Escolha uma opção:");
+        System.out.print("Escolha uma opção: ");
         int opcao = scanner.nextInt();
         switch (opcao) {
             case 1:
@@ -68,14 +67,14 @@ public class Main {
     }
 
     private static void manageProducts(Scanner scanner) {
-        clearScreen();
 
-        System.out.println("1. Cadastrar novo produto");
+        System.out.println("\n1. Cadastrar novo produto");
         System.out.println("2. Consultar dados do produto");
         System.out.println("3. Consultar todos os produtos");
-        System.out.println("4. Voltar");
+        System.out.println("4. Remover produto do catálogo");
+        System.out.println("5. Voltar");
 
-        System.out.println("Escolha uma opção:");
+        System.out.print("Escolha uma opção: ");
         int opcao = scanner.nextInt();
         switch (opcao) {
             case 1:
@@ -88,6 +87,11 @@ public class Main {
                 listProducts(scanner);
                 break;
             case 4:
+                removeProduct(scanner); //remove do catalogo
+
+                break;
+
+            case 5:
                 return;
             default:
                 System.out.println("Opção inválida. Tente novamente.");
@@ -95,34 +99,32 @@ public class Main {
     }
 
     private static void registerClient(Scanner scanner) {
-        clearScreen();
-
 
         scanner.nextLine();
-        System.out.println("Digite o nome do cliente:");
+        System.out.print("Nome: ");
         String name = scanner.nextLine();
-        System.out.println("Digite o CPF do cliente:");
+        System.out.print("CPF: ");
         String cpf = scanner.nextLine();
-        System.out.println("Digite o endereço do cliente:");
+        System.out.print("Rua/Avenida: ");
         String street = scanner.nextLine();
-        System.out.println("Digite o bairro do cliente:");
+        System.out.print("Bairro: ");
         String district = scanner.nextLine();
-        System.out.println("Digite o CEP do cliente:");
+        System.out.print("CEP: ");
         String zipCode = scanner.nextLine();
-        System.out.println("Digite o complemento do cliente:");
+        System.out.print("Complemento: ");
         String complement = scanner.nextLine();
-        System.out.println("Digite o número do endereço do cliente:");
-        Integer number = scanner.nextInt();
+        System.out.print("Número: ");
+        String number = scanner.next();
 
         Address address = new Address(street, district, zipCode, complement, number);
         Client client = new Client(name, cpf, address);
         clientes.add(client);
+        System.out.println("Cliente cadastrado com sucesso.");
     }
 
     private static void searchClient(Scanner scanner) {
-        clearScreen();
 
-        System.out.println("Digite o CPF do cliente:");
+        System.out.print("Digite o CPF do cliente: ");
         String cpf = scanner.next();
 
         for (Client client : clientes) {
@@ -140,7 +142,7 @@ public class Main {
                     System.out.println("Número do aluguel: " + lease.getLeaseNumber());
                     System.out.println("Data do aluguel: " + lease.getLeaseDate());
                     System.out.println("Data de devolução: " + lease.getReturnDate());
-                    System.out.println("Produtos alugados:");
+                    System.out.println("Produtos alugados:\n");
                     for (Product product : lease.getLeasedItems()) {
                         System.out.println("Título: " + product.getTitle());
                         System.out.println("Preço: " + product.getPrice());
@@ -159,107 +161,144 @@ public class Main {
     }
 
     private static void listClients(Scanner scanner) {
-        clearScreen();
 
         for (Client client : clientes) {
             System.out.println("Nome: " + client.getName());
             System.out.println("CPF: " + client.getCpf());
             System.out.println("Endereço: " + client.getAddress().getFullAddress());
+            System.out.println();
         }
     }
 
     private static void realizarLocacao(Scanner scanner) {
-        clearScreen();
-
-        System.out.println("Digite o CPF do cliente:");
+    
+        System.out.print("Digite o CPF do cliente: ");
         String cpf = scanner.next();
-
+    
         for (Client client : clientes) {
             if (client.getCpf().equals(cpf)) {
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
                 String nowString = now.format(formatter);
-
+    
                 String leaseNumber = nowString + cpf;
-
-                System.out.println("Digite a data do aluguel:");
+    
+                System.out.print("Digite a data do aluguel: ");
                 String leaseDate = scanner.next();
-                System.out.println("Digite a data de devolução:");
+                System.out.print("Digite a data de devolução: ");
                 String returnDate = scanner.next();
-
-                Lease lease = new Lease(leaseNumber, leaseDate, returnDate, client, new ArrayList<>());
-
+    
+                ArrayList<Product> leasedItems = new ArrayList<>();
+    
                 while(true) {
-                    System.out.println("Digite o código do produto que deseja alugar:");
-
+                    System.out.print("Digite o código do produto que deseja alugar: ");
+    
                     String code = scanner.next();
                     boolean productExists = false;
                     for (Product product : produtos) {
-
+    
                         if(!product.getCode().equals(code)) continue;
-
+    
                         productExists = true;
-
+    
                         if(product.isAvailable()) {
-                            lease.addLeasedItem(product);
                             product.rent();
+                            leasedItems.add(product);
                             break;
                         }
-
+    
                         System.out.println("Produto indisponível.");
                     }
-
+    
                     if(!productExists) {
                         System.out.println("Produto não encontrado.");
                     }
-
-                    System.out.println("Deseja adicionar mais produtos? (S/N)");
+    
+                    System.out.print("Deseja adicionar mais produtos? (S/N) ");
                     String answer = scanner.next();
-                    if (answer.equals("N")) {
+                    if (answer.equalsIgnoreCase("N")) {
                         break;
                     }
                 }
-
+    
+                if (leasedItems.isEmpty()) {
+                    System.out.println("Nenhum produto foi selecionado para alugar.\n");
+                    return;
+                }
+    
+                Lease lease = new Lease(leaseNumber, leaseDate, returnDate, client, leasedItems);
                 client.addLease(lease);
+    
+                while (true) {
+                    System.out.print("Deseja remover algum produto adicionado? (S/N) ");
+                    String answer = scanner.next();
+                    if (answer.equalsIgnoreCase("S")) {
+                        System.out.print("Digite o código do produto a ser removido: ");
+                        String codeToRemove = scanner.next();
+                        boolean removed = false;
+                        for (Product product : lease.getLeasedItems()) {
+                            if (product.getCode().equals(codeToRemove)) {
+                                lease.removeLeasedItem(product);
+                                product.returnProduct();  // Devolve o produto
+                                System.out.println("Produto removido com sucesso.");
+                                removed = true;
+                                break;
+                            }
+                        }
+                        if (!removed) {
+                            System.out.println("Produto não encontrado na lista de produtos alugados.");
+                        }
+                    } else if (answer.equalsIgnoreCase("N")) {
+                        break;
+                    } else {
+                        System.out.println("Opção inválida. Tente novamente.");
+                    }
+                }
+
+                if (leasedItems.isEmpty()) {
+                    System.out.println("Nenhum produto foi selecionado para alugar.\n");
+                    return;
+                }
+    
                 System.out.println("Locação realizada com sucesso.");
                 System.out.println("Número da locação: " + leaseNumber);
-                System.out.println("Valor total: " + lease.getTotalValue() + "\n");
-
+                System.out.println("Valor total: " + lease.getTotalValue());
+    
                 return;
             }
         }
         System.out.println("Cliente não encontrado.");
-
     }
 
 
+
+
     private static void registerProduct(Scanner scanner) {
-        clearScreen();
 
         scanner.nextLine();
-        System.out.println("Digite o título do produto:");
+        System.out.print("Digite o título do produto: ");
         String title = scanner.nextLine();
-        System.out.println("Digite o preço do produto:");
+        System.out.print("Digite o preço do produto (R$): ");
         Double price = scanner.nextDouble();
-        System.out.println("Digite a duração do produto:");
+        System.out.print("Digite a duração do produto (min): ");
         Integer duration = scanner.nextInt();
         scanner.nextLine();
-        System.out.println("Digite os gêneros do produto separados por ',':");
+        System.out.print("Digite os gêneros do produto separados por ',': ");
         String genres = scanner.nextLine();
         String[] genresArray = genres.split(",");
 
-        System.out.println("Digite o nome das partes da série separadas por ',' (caso não seja uma serie digite N/A):");
+        System.out.print("Digite o nome das partes da série separadas por ',' (caso não seja uma serie digite n/a): ");
         String pieces = scanner.nextLine();
 
-        System.out.println("Digite o código do produto:");
+        System.out.print("Digite o código do produto: ");
         String code = scanner.nextLine();
 
-        System.out.println("Digite a quantidade do produto:");
+        System.out.print("Digite a quantidade do produto: ");
         Integer quantity = scanner.nextInt();
 
-        if(!pieces.equals("N/A")){
+        if(!pieces.equalsIgnoreCase("N/A")){
             String[] piecesArray = pieces.split(",");
-            Series series = new Series(title, duration, genresArray, price, "001", piecesArray, quantity);
+            Product series = new Series(title, duration, genresArray, price, code, piecesArray, quantity);
             produtos.add(series);
             return;
         }
@@ -268,21 +307,38 @@ public class Main {
         produtos.add(product);
     }
 
-    private static void searchProducts(Scanner scanner) {
-        clearScreen();
+    private static void removeProduct(Scanner scanner) {
 
-        System.out.println("Digite o código do produto:");
+        System.out.print("Digite o código do produto: ");
         String code = scanner.next();
 
         for (Product product : produtos) {
             if (product.getCode().equals(code)) {
+                produtos.remove(product);
+                System.out.println("Produto removido com sucesso.");
+                return;
+            }
+        }
+        System.out.println("Produto não encontrado.");
+    }
+
+    private static void searchProducts(Scanner scanner) {
+
+        System.out.print("Digite o código do produto: ");
+        String code = scanner.next();
+
+        for (Product product : produtos) {
+            if (product.getCode().equals(code)) {
+                System.out.println("Código: " + product.getCode());
                 System.out.println("Título: " + product.getTitle());
                 System.out.println("Preço: " + product.getPrice());
                 System.out.println("Duração: " + product.getDuration());
                 System.out.println("Gêneros: " + String.join(", ", product.getGenres()));
+                if (product instanceof Series) {
+                    System.out.println("Partes: " + String.join(", ", ((Series) product).getPieces()));
+                }
                 System.out.println("Quantidade: " + product.getQuantity());
                 System.out.println("Quantidade alugada: " + product.getRentedQuantity());
-                System.out.println();
                 return;
             }
         }
@@ -290,21 +346,19 @@ public class Main {
     }
 
     private static void listProducts(Scanner scanner) {
-        clearScreen();
 
         for (Product product : produtos) {
+            System.out.println();
+            System.out.println("Código: " + product.getCode());
             System.out.println("Título: " + product.getTitle());
             System.out.println("Preço: " + product.getPrice());
             System.out.println("Duração: " + product.getDuration());
             System.out.println("Gêneros: " + String.join(", ", product.getGenres()));
+            if (product instanceof Series) {
+                System.out.println("Partes: " + String.join(", ", ((Series) product).getPieces()));
+            }
             System.out.println("Quantidade: " + product.getQuantity());
             System.out.println("Quantidade alugada: " + product.getRentedQuantity());
-            System.out.println();
         }
-    }
-
-    private static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

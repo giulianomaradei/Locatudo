@@ -16,14 +16,10 @@ public class Lease {
         this.leaseDate = leaseDate;
         this.returnDate = returnDate;
         this.client = client;
-
         this.leasedItems = leasedItems;
-    }
-
-    public void addLeasedItem(Product product) {
-        this.leasedItems.add(product);
-
-        totalValue += product.getPrice();
+        for (Product product : leasedItems) {
+            totalValue += product.getPrice();
+        }
     }
 
     public void removeLeasedItem(Product product) {

@@ -42,6 +42,4 @@ public class Client {
         return this.leases;
     }
 
-
-
 }
