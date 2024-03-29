@@ -105,6 +105,16 @@ public class Main {
         String name = scanner.nextLine();
         System.out.print("CPF: ");
         String cpf = scanner.nextLine();
+
+        while(true) {
+            String finalCpf = cpf;
+            if(clientes.stream().noneMatch(client -> client.getCpf().equals(finalCpf))) {
+                break;
+            }
+            System.out.println("CPF já cadastrado. Digite um novo CPF: ");
+            cpf = scanner.nextLine();
+        }
+
         System.out.print("Rua/Avenida: ");
         String street = scanner.nextLine();
         System.out.print("Bairro: ");
@@ -269,9 +279,6 @@ public class Main {
         }
         System.out.println("Cliente não encontrado.");
     }
-
-
-
 
     private static void registerProduct(Scanner scanner) {
 
