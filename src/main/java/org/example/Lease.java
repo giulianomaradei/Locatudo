@@ -16,20 +16,15 @@ public class Lease {
         this.leaseDate = leaseDate;
         this.returnDate = returnDate;
         this.client = client;
-
         this.leasedItems = leasedItems;
+        for (Product product : leasedItems) {
+            totalValue += product.getPrice();
+        }
     }
 
-    public void addLeasedItem(Product product) {
-        this.leasedItems.add(product);
-
-        totalValue += product.getPrice();
-    }
-
-    public void removeLeasedItem(Integer item) {
-        this.leasedItems.remove(item);
-
-        totalValue -= this.leasedItems.get(item).getPrice();
+    public void removeLeasedItem(Product product) {
+        totalValue -= product.getPrice();
+        this.leasedItems.remove(product);
     }
 
     public String getLeaseNumber() {

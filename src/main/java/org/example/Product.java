@@ -58,4 +58,8 @@ package org.example;
         this.rentedQuantity++;
     }
 
+    public void returnProduct() {
+        this.rentedQuantity--;
+    }
+
 }
