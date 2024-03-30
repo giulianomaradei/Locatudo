@@ -1,27 +1,19 @@
 package org.example;
 
- public class Movie extends Leaseable {
-
-    public Integer duration;
-
-    private final String[] genres;
+public class Movie extends Leaseable {
 
     public Movie(String code, String title, Double price, Integer duration, String[] genres, Integer quantity) {
-        super(code, title, price, quantity);
-
-        this.duration = duration;
-        this.genres = genres;
+        super(code, title, price, duration, genres, quantity);
     }
 
-
-     @Override
-     public String getDetails() {
-         return "Titulo: " + this.title + "\n" +
-                 "Codigo: " + this.code + "\n" +
-                 "Preço: " + this.price + "\n" +
-                 "Duração: " + this.duration + "\n" +
-                 "Generos: " + String.join(", ", this.genres) + "\n" +
-                 "Quantidade: " + this.quantity + "\n" +
-                 "Total Alugados: " + this.rentedQuantity + "\n";
-     }
- }
+    @Override
+    public String getDetails() {
+        return "Codigo: " + getCode() + "\n" +
+                "Titulo: " + getTitle() + "\n" +
+                "Preço: R$" + getPrice() + "\n" +
+                "Duração: " + getDuration() + " min" + "\n" +
+                "Generos: " + String.join(", ", getGenres()) + "\n" +
+                "Quantidade: " + getQuantity() + "\n" +
+                "Total Alugados: " + getRentedQuantity() + "\n";
+    }
+}

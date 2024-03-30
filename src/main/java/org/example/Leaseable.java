@@ -1,19 +1,40 @@
 package org.example;
 
-abstract public class Leaseable {
-    protected Integer quantity, rentedQuantity = 0;
-    protected Double price;
+public abstract class Leaseable {
+    
+    private Integer quantity, duration, rentedQuantity = 0;
+    private Double price;
+    private String code, title;
+    private String[] genres;
 
-    protected final String code, title;
-
-    public Leaseable(String code, String title, Double price, Integer quantity) {
-        this.price = price;
-        this.quantity = quantity;
+    public Leaseable(String code, String title, Double price, Integer duration, String[] genres, Integer quantity) {
         this.code = code;
         this.title = title;
+        this.price = price;
+        this.duration = duration;
+        this.genres = genres;
+        this.quantity = quantity;
     }
 
-    public abstract String getDetails();
+    public void rent() {
+        this.rentedQuantity++;
+    }
+
+    public void returnProduct() {
+        this.rentedQuantity--;
+    }
+
+    public boolean isAvailable() {
+        return this.quantity > this.rentedQuantity;
+    }
+
+    public Integer getDuration() {
+        return this.duration;
+    }
+
+    public String[] getGenres() {
+        return this.genres;
+    }
 
     public Integer getQuantity() {
         return this.quantity;
@@ -27,18 +48,6 @@ abstract public class Leaseable {
         return this.price;
     }
 
-    public boolean isAvailable() {
-        return this.quantity > this.rentedQuantity;
-    }
-
-    public void rent() {
-        this.rentedQuantity++;
-    }
-
-    public void returnProduct() {
-        this.rentedQuantity--;
-    }
-
     public String getCode() {
         return this.code;
     }
@@ -46,5 +55,7 @@ abstract public class Leaseable {
     public String getTitle() {
         return this.title;
     }
+
+    public abstract String getDetails();
 
 }

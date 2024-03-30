@@ -2,16 +2,17 @@ package org.example;
 
 import java.util.ArrayList;
 
-public class Lease {
+public class Lease implements ILease {
 
     private String leaseNumber;
     private String leaseDate;
     private String returnDate;
-    private Client client;
+    private IClient client;
     private ArrayList<Leaseable> leasedItems;
     private Double totalValue = 0.;
 
-    public Lease(String leaseNumber, String leaseDate, String returnDate, Client client, ArrayList<Leaseable> leasedItems) {
+    public Lease(String leaseNumber, String leaseDate, String returnDate, IClient client,
+            ArrayList<Leaseable> leasedItems) {
         this.leaseNumber = leaseNumber;
         this.leaseDate = leaseDate;
         this.returnDate = returnDate;
@@ -39,7 +40,7 @@ public class Lease {
         return this.returnDate;
     }
 
-    public Client getClient() {
+    public IClient getClient() {
         return this.client;
     }
 
