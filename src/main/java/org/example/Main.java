@@ -90,7 +90,7 @@ public class Main {
                 listProducts(scanner);
                 break;
             case 4:
-                removeProduct(scanner); // remove do catalogo
+                removeProduct(scanner);
                 break;
             case 5:
                 return;
