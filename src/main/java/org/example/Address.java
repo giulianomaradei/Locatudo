@@ -16,24 +16,4 @@ public class Address {
         return "Rua " + this.street + ", n° " + this.number + ", Bairro " + this.district + ", CEP " + this.zipCode
                 + ", " + this.complement;
     }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public void setComplement(String complement) {
-        this.complement = complement;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
 }
