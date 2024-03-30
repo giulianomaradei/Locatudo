@@ -2,12 +2,16 @@ package org.example;
 
 public class Series extends Leaseable {
 
+    private Integer duration;
+    private String[] genres;
     private String[] pieces;
 
     public Series(String code, String title, Double price, Integer duration, String[] genres, Integer quantity,
             String[] pieces) {
-        super(code, title, price, duration, genres, quantity);
+        super(code, title, price, quantity);
 
+        this.duration = duration;
+        this.genres = genres;
         this.pieces = pieces;
     }
 
@@ -16,8 +20,8 @@ public class Series extends Leaseable {
         return "Código: " + getCode() + "\n" +
                 "Título: " + getTitle() + "\n" +
                 "Preço: R$" + getPrice() + "\n" +
-                "Duração: " + getDuration() + " min" + "\n" +
-                "Gêneros: " + String.join(", ", getGenres()) + "\n" +
+                "Duração: " + duration + " min" + "\n" +
+                "Gêneros: " + String.join(", ", genres) + "\n" +
                 "Pedaços: " + String.join(", ", this.pieces) + "\n" +
                 "Quantidade: " + getQuantity() + "\n" +
                 "Total Alugados: " + getRentedQuantity() + "\n";

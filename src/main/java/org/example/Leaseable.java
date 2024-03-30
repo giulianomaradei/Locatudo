@@ -2,17 +2,14 @@ package org.example;
 
 public abstract class Leaseable {
     
-    private Integer quantity, duration, rentedQuantity = 0;
+    private Integer quantity, rentedQuantity = 0;
     private Double price;
     private String code, title;
-    private String[] genres;
 
-    public Leaseable(String code, String title, Double price, Integer duration, String[] genres, Integer quantity) {
+    public Leaseable(String code, String title, Double price, Integer quantity) {
         this.code = code;
         this.title = title;
         this.price = price;
-        this.duration = duration;
-        this.genres = genres;
         this.quantity = quantity;
     }
 
@@ -26,14 +23,6 @@ public abstract class Leaseable {
 
     public boolean isAvailable() {
         return this.quantity > this.rentedQuantity;
-    }
-
-    public Integer getDuration() {
-        return this.duration;
-    }
-
-    public String[] getGenres() {
-        return this.genres;
     }
 
     public Integer getQuantity() {

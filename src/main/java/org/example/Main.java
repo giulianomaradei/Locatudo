@@ -16,7 +16,7 @@ public class Main {
         produtos.add(new Movie("001", "Senhor dos Anéis", 10.0, 120, genres, 10));
 
         String[] pieces = { "Episódio 1", "Episódio 2", "Episódio 3" };
-        produtos.add(new Series("001", "Breaking Bad", 20.0, 60, genres, 10, pieces));
+        produtos.add(new Series("002", "Breaking Bad", 20.0, 60, genres, 1, pieces));
 
         clientes.add(new Client("Fulano", "123", new Address("Exemplo", "Exemplo", "12345678", "Apto 0", "0")));
 

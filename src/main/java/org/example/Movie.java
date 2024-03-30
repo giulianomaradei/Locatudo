@@ -2,8 +2,14 @@ package org.example;
 
 public class Movie extends Leaseable {
 
+    private Integer duration;
+    private String[] genres;
+
     public Movie(String code, String title, Double price, Integer duration, String[] genres, Integer quantity) {
-        super(code, title, price, duration, genres, quantity);
+        super(code, title, price, quantity);
+
+        this.duration = duration;
+        this.genres = genres;
     }
 
     @Override
@@ -11,8 +17,8 @@ public class Movie extends Leaseable {
         return "Codigo: " + getCode() + "\n" +
                 "Titulo: " + getTitle() + "\n" +
                 "Preço: R$" + getPrice() + "\n" +
-                "Duração: " + getDuration() + " min" + "\n" +
-                "Generos: " + String.join(", ", getGenres()) + "\n" +
+                "Duração: " + duration + " min" + "\n" +
+                "Generos: " + String.join(", ", genres) + "\n" +
                 "Quantidade: " + getQuantity() + "\n" +
                 "Total Alugados: " + getRentedQuantity() + "\n";
     }
