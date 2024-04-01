@@ -2,27 +2,24 @@ package org.example;
 
 import java.util.ArrayList;
 
-public class Client {
+public class Client implements IClient {
 
     private String name, cpf;
-
     private Address address;
-
-    private ArrayList<Lease> leases;
+    private ArrayList<ILease> leases;
 
     public Client(String name, String cpf, Address address) {
         this.name = name;
         this.cpf = cpf;
         this.address = address;
-
-        this.leases = new ArrayList<Lease>();
+        this.leases = new ArrayList<ILease>();
     }
 
-    public void addLease(Lease lease) {
+    public void addLease(ILease lease) {
         this.leases.add(lease);
     }
 
-    public void removeLease(Lease lease) {
+    public void removeLease(ILease lease) {
         this.leases.remove(lease);
     }
 
@@ -38,7 +35,7 @@ public class Client {
         return this.address;
     }
 
-    public ArrayList<Lease> getLeases() {
+    public ArrayList<ILease> getLeases() {
         return this.leases;
     }
 

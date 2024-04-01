@@ -7,15 +7,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static List<Client> clientes = new ArrayList<>();
-    private static List<Product> produtos = new ArrayList<>();
+    private static List<IClient> clientes = new ArrayList<>();
+    private static List<Leaseable> produtos = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        produtos.add(new Product("001", "Senhor dos Anéis", 10.0, 120, new String[]{"Ação", "Aventura"}, 10));
-        produtos.add(new Product("002", "Django Livre", 20.0, 120, new String[]{"Ação", "Aventura"}, 1));
+        String[] genres = { "Drama", "Aventura" };
+        produtos.add(new Movie("001", "Senhor dos Anéis", 10.0, 120, genres, 10));
 
-        clientes.add(new Client("EU", "123", new Address("1", "1", "12345678", "Apto 0", "1")));
+        String[] pieces = { "Episódio 1", "Episódio 2", "Episódio 3" };
+        produtos.add(new Series("002", "Breaking Bad", 20.0, 60, genres, 1, pieces));
+
+        clientes.add(new Client("Fulano", "123", new Address("Exemplo", "Exemplo", "12345678", "Apto 0", "0")));
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -57,7 +60,7 @@ public class Main {
                 listClients(scanner);
                 break;
             case 4:
-                realizarLocacao(scanner);
+                createLease(scanner);
                 break;
             case 5:
                 return;
@@ -87,10 +90,8 @@ public class Main {
                 listProducts(scanner);
                 break;
             case 4:
-                removeProduct(scanner); //remove do catalogo
-
+                removeProduct(scanner);
                 break;
-
             case 5:
                 return;
             default:
@@ -106,12 +107,12 @@ public class Main {
         System.out.print("CPF: ");
         String cpf = scanner.nextLine();
 
-        while(true) {
+        while (true) {
             String finalCpf = cpf;
-            if(clientes.stream().noneMatch(client -> client.getCpf().equals(finalCpf))) {
+            if (clientes.stream().noneMatch(client -> client.getCpf().equals(finalCpf))) {
                 break;
             }
-            System.out.println("CPF já cadastrado. Digite um novo CPF: ");
+            System.out.print("CPF já cadastrado. Digite um novo CPF: ");
             cpf = scanner.nextLine();
         }
 
@@ -127,7 +128,7 @@ public class Main {
         String number = scanner.next();
 
         Address address = new Address(street, district, zipCode, complement, number);
-        Client client = new Client(name, cpf, address);
+        IClient client = new Client(name, cpf, address);
         clientes.add(client);
         System.out.println("Cliente cadastrado com sucesso.");
     }
@@ -137,27 +138,23 @@ public class Main {
         System.out.print("Digite o CPF do cliente: ");
         String cpf = scanner.next();
 
-        for (Client client : clientes) {
+        for (IClient client : clientes) {
             if (client.getCpf().equals(cpf)) {
                 System.out.println("Nome: " + client.getName());
                 System.out.println("CPF: " + client.getCpf());
                 System.out.println("Endereço: " + client.getAddress().getFullAddress());
 
-
-                if(client.getLeases().isEmpty()) {
+                if (client.getLeases().isEmpty()) {
                     System.out.println("Cliente não possui locações.");
                     return;
                 }
-                for (Lease lease : client.getLeases()) {
+                for (ILease lease : client.getLeases()) {
                     System.out.println("Número do aluguel: " + lease.getLeaseNumber());
                     System.out.println("Data do aluguel: " + lease.getLeaseDate());
                     System.out.println("Data de devolução: " + lease.getReturnDate());
                     System.out.println("Produtos alugados:\n");
-                    for (Product product : lease.getLeasedItems()) {
-                        System.out.println("Título: " + product.getTitle());
-                        System.out.println("Preço: " + product.getPrice());
-                        System.out.println("Duração: " + product.getDuration());
-                        System.out.println("Gêneros: " + String.join(", ", product.getGenres()));
+                    for (Leaseable product : lease.getLeasedItems()) {
+                        System.out.println(product.getDetails());
                         System.out.println();
                     }
                     System.out.println("Valor total: " + lease.getTotalValue());
@@ -172,7 +169,7 @@ public class Main {
 
     private static void listClients(Scanner scanner) {
 
-        for (Client client : clientes) {
+        for (IClient client : clientes) {
             System.out.println("Nome: " + client.getName());
             System.out.println("CPF: " + client.getCpf());
             System.out.println("Endereço: " + client.getAddress().getFullAddress());
@@ -180,65 +177,66 @@ public class Main {
         }
     }
 
-    private static void realizarLocacao(Scanner scanner) {
-    
+    private static void createLease(Scanner scanner) {
+
         System.out.print("Digite o CPF do cliente: ");
         String cpf = scanner.next();
-    
-        for (Client client : clientes) {
+
+        for (IClient client : clientes) {
             if (client.getCpf().equals(cpf)) {
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
                 String nowString = now.format(formatter);
-    
+
                 String leaseNumber = nowString + cpf;
-    
+
                 System.out.print("Digite a data do aluguel: ");
                 String leaseDate = scanner.next();
                 System.out.print("Digite a data de devolução: ");
                 String returnDate = scanner.next();
-    
-                ArrayList<Product> leasedItems = new ArrayList<>();
-    
-                while(true) {
+
+                ArrayList<Leaseable> leasedItems = new ArrayList<>();
+
+                while (true) {
                     System.out.print("Digite o código do produto que deseja alugar: ");
-    
+
                     String code = scanner.next();
                     boolean productExists = false;
-                    for (Product product : produtos) {
-    
-                        if(!product.getCode().equals(code)) continue;
-    
+                    for (Leaseable product : produtos) {
+
+                        if (!product.getCode().equals(code))
+                            continue;
+
                         productExists = true;
-    
-                        if(product.isAvailable()) {
+
+                        if (product.isAvailable()) {
                             product.rent();
                             leasedItems.add(product);
                             break;
                         }
-    
+
                         System.out.println("Produto indisponível.");
                     }
-    
-                    if(!productExists) {
+
+                    if (!productExists) {
                         System.out.println("Produto não encontrado.");
                     }
-    
+
                     System.out.print("Deseja adicionar mais produtos? (S/N) ");
                     String answer = scanner.next();
                     if (answer.equalsIgnoreCase("N")) {
                         break;
                     }
                 }
-    
+
                 if (leasedItems.isEmpty()) {
                     System.out.println("Nenhum produto foi selecionado para alugar.\n");
                     return;
                 }
-    
-                Lease lease = new Lease(leaseNumber, leaseDate, returnDate, client, leasedItems);
+
+                ILease lease = new Lease(leaseNumber, leaseDate, returnDate, client, leasedItems);
                 client.addLease(lease);
-    
+
                 while (true) {
                     System.out.print("Deseja remover algum produto adicionado? (S/N) ");
                     String answer = scanner.next();
@@ -246,10 +244,10 @@ public class Main {
                         System.out.print("Digite o código do produto a ser removido: ");
                         String codeToRemove = scanner.next();
                         boolean removed = false;
-                        for (Product product : lease.getLeasedItems()) {
+                        for (Leaseable product : lease.getLeasedItems()) {
                             if (product.getCode().equals(codeToRemove)) {
                                 lease.removeLeasedItem(product);
-                                product.returnProduct();  // Devolve o produto
+                                product.returnProduct(); // Devolve o produto
                                 System.out.println("Produto removido com sucesso.");
                                 removed = true;
                                 break;
@@ -269,11 +267,11 @@ public class Main {
                     System.out.println("Nenhum produto foi selecionado para alugar.\n");
                     return;
                 }
-    
+
                 System.out.println("Locação realizada com sucesso.");
                 System.out.println("Número da locação: " + leaseNumber);
                 System.out.println("Valor total: " + lease.getTotalValue());
-    
+
                 return;
             }
         }
@@ -300,17 +298,26 @@ public class Main {
         System.out.print("Digite o código do produto: ");
         String code = scanner.nextLine();
 
+        while (true) {
+            String finalCode = code;
+            if (produtos.stream().noneMatch(product -> product.getCode().equals(finalCode))) {
+                break;
+            }
+            System.out.println("Código já cadastrado. Digite um novo código: ");
+            code = scanner.nextLine();
+        }
+
         System.out.print("Digite a quantidade do produto: ");
         Integer quantity = scanner.nextInt();
 
-        if(!pieces.equalsIgnoreCase("N/A")){
+        if (!pieces.equalsIgnoreCase("N/A")) {
             String[] piecesArray = pieces.split(",");
-            Product series = new Series(title, duration, genresArray, price, code, piecesArray, quantity);
+            Leaseable series = new Series(code, title, price, duration, genresArray, quantity, piecesArray);
             produtos.add(series);
             return;
         }
 
-        Product product = new Product(code, title, price, duration, genresArray, quantity);
+        Movie product = new Movie(code, title, price, duration, genresArray, quantity);
         produtos.add(product);
     }
 
@@ -319,7 +326,7 @@ public class Main {
         System.out.print("Digite o código do produto: ");
         String code = scanner.next();
 
-        for (Product product : produtos) {
+        for (Leaseable product : produtos) {
             if (product.getCode().equals(code)) {
                 produtos.remove(product);
                 System.out.println("Produto removido com sucesso.");
@@ -334,18 +341,9 @@ public class Main {
         System.out.print("Digite o código do produto: ");
         String code = scanner.next();
 
-        for (Product product : produtos) {
+        for (Leaseable product : produtos) {
             if (product.getCode().equals(code)) {
-                System.out.println("Código: " + product.getCode());
-                System.out.println("Título: " + product.getTitle());
-                System.out.println("Preço: " + product.getPrice());
-                System.out.println("Duração: " + product.getDuration());
-                System.out.println("Gêneros: " + String.join(", ", product.getGenres()));
-                if (product instanceof Series) {
-                    System.out.println("Partes: " + String.join(", ", ((Series) product).getPieces()));
-                }
-                System.out.println("Quantidade: " + product.getQuantity());
-                System.out.println("Quantidade alugada: " + product.getRentedQuantity());
+                System.out.println(product.getDetails());
                 return;
             }
         }
@@ -354,18 +352,9 @@ public class Main {
 
     private static void listProducts(Scanner scanner) {
 
-        for (Product product : produtos) {
+        for (Leaseable product : produtos) {
             System.out.println();
-            System.out.println("Código: " + product.getCode());
-            System.out.println("Título: " + product.getTitle());
-            System.out.println("Preço: " + product.getPrice());
-            System.out.println("Duração: " + product.getDuration());
-            System.out.println("Gêneros: " + String.join(", ", product.getGenres()));
-            if (product instanceof Series) {
-                System.out.println("Partes: " + String.join(", ", ((Series) product).getPieces()));
-            }
-            System.out.println("Quantidade: " + product.getQuantity());
-            System.out.println("Quantidade alugada: " + product.getRentedQuantity());
+            System.out.println(product.getDetails());
         }
     }
 }

@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 public class LeaseTest {
 
-    private final Product product = new Product("PROD124", "Produto Exemplo 2", 200.0, 120,
+    private final Movie product = new Movie("PROD124", "Produto Exemplo 2", 200.0, 120,
     new String[] { "Genêro 3", "Genêro 4" }, 20);
-    private final ArrayList<Product> leasedItems = new ArrayList<Product>(Arrays.asList(product));
+    private final ArrayList<Leaseable> leasedItems = new ArrayList<Leaseable>(Arrays.asList(product));
     private final Lease lease = new Lease("Número do Contrato", "Data de Início", "Data de Retorno", null, leasedItems);
 
     @Test
